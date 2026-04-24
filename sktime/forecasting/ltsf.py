@@ -121,8 +121,6 @@ class LTSFLinearForecaster(BaseDeepNetworkPyTorch):
         super().__init__(
             num_epochs=num_epochs,
             batch_size=batch_size,
-            in_channels=in_channels,
-            individual=individual,
             criterion=criterion,
             criterion_kwargs=criterion_kwargs,
             optimizer=optimizer,
@@ -456,8 +454,6 @@ class LTSFDLinearForecaster(BaseDeepNetworkPyTorch):
         super().__init__(
             num_epochs=num_epochs,
             batch_size=batch_size,
-            in_channels=in_channels,
-            individual=individual,
             criterion=criterion,
             criterion_kwargs=criterion_kwargs,
             optimizer=optimizer,
@@ -634,8 +630,6 @@ class LTSFNLinearForecaster(BaseDeepNetworkPyTorch):
         super().__init__(
             num_epochs=num_epochs,
             batch_size=batch_size,
-            in_channels=in_channels,
-            individual=individual,
             criterion=criterion,
             criterion_kwargs=criterion_kwargs,
             optimizer=optimizer,
@@ -1016,8 +1010,6 @@ class LTSFTransformerForecaster(BaseDeepNetworkPyTorch):
         super().__init__(
             num_epochs=num_epochs,
             batch_size=batch_size,
-            in_channels=in_channels,
-            individual=individual,
             criterion=criterion,
             criterion_kwargs=criterion_kwargs,
             optimizer=optimizer,

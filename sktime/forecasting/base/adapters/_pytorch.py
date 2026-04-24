@@ -54,8 +54,6 @@ class BaseDeepNetworkPyTorch(BaseForecaster):
         self,
         num_epochs=16,
         batch_size=8,
-        in_channels=1,
-        individual=False,
         criterion=None,
         criterion_kwargs=None,
         optimizer=None,
@@ -66,8 +64,6 @@ class BaseDeepNetworkPyTorch(BaseForecaster):
     ):
         self.num_epochs = num_epochs
         self.batch_size = batch_size
-        self.in_channels = in_channels
-        self.individual = individual
         self.criterion = criterion
         self.criterion_kwargs = criterion_kwargs
         self.optimizer = optimizer
