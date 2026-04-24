@@ -4,7 +4,7 @@ import numpy as np
 
 from sktime.forecasting.base.adapters._pytorch import BaseDeepNetworkPyTorch
 from sktime.networks.es_rnn import ESRNN
-from sktime.utils.dependencies import _check_soft_dependencies, _safe_import
+from sktime.utils.dependencies import _safe_import
 
 torch = _safe_import("torch")
 Dataset = _safe_import("torch.utils.data.Dataset")
@@ -188,23 +188,6 @@ class ESRNNForecaster(BaseDeepNetworkPyTorch):
         self.pred_len = pred_len
         self.stride = stride
         self.criterion = criterion
-        if _check_soft_dependencies("torch", severity="none"):
-            import torch
-
-            self.criterions = {
-                "MSE": torch.nn.MSELoss,
-                "L1": torch.nn.L1Loss,
-                "SmoothL1": torch.nn.SmoothL1Loss,
-                "Huber": torch.nn.HuberLoss,
-            }
-
-            self.optimizers = {
-                "Adadelta": torch.optim.Adadelta,
-                "Adagrad": torch.optim.Adagrad,
-                "Adam": torch.optim.Adam,
-                "AdamW": torch.optim.AdamW,
-                "SGD": torch.optim.SGD,
-            }
 
     def _instantiate_criterion(self):
         if self.criterion:

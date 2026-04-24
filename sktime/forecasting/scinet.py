@@ -195,26 +195,6 @@ class SCINetForecaster(BaseDeepNetworkPyTorch):
             custom_dataset_pred=custom_dataset_pred,
         )
 
-        from sktime.utils.dependencies import _check_soft_dependencies
-
-        if _check_soft_dependencies("torch"):
-            import torch
-
-            self.criterions = {
-                "MSE": torch.nn.MSELoss,
-                "L1": torch.nn.L1Loss,
-                "SmoothL1": torch.nn.SmoothL1Loss,
-                "Huber": torch.nn.HuberLoss,
-            }
-
-            self.optimizers = {
-                "Adadelta": torch.optim.Adadelta,
-                "Adagrad": torch.optim.Adagrad,
-                "Adam": torch.optim.Adam,
-                "AdamW": torch.optim.AdamW,
-                "SGD": torch.optim.SGD,
-            }
-
     def _build_network(self, fh):
         # Define the SCINet-based network
         from sktime.networks.scinet import SCINet
