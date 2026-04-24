@@ -4,7 +4,7 @@ import numpy as np
 
 from sktime.forecasting.base.adapters._pytorch import BaseDeepNetworkPyTorch
 from sktime.networks.es_rnn import ESRNN
-from sktime.utils.dependencies import _check_soft_dependencies, _safe_import
+from sktime.utils.dependencies import _safe_import
 
 torch = _safe_import("torch")
 Dataset = _safe_import("torch.utils.data.Dataset")
@@ -96,12 +96,23 @@ class ESRNNForecaster(BaseDeepNetworkPyTorch):
         size of batch during training
     num_epochs : int
         number of epochs during training
-    criterion : torch.nn Loss Function, default=torch.nn.MSELoss
-        loss function to be used for training
+    criterion : Optional[str], default= None
+        Loss function to be used for training. Options are:
+        "MSE": Mean Squared Error
+        "L1": Mean Absolute Error
+        "SmoothL1": Smooth L1 Loss
+        "Huber": Huber Loss
+        If None, defaults to pin_ball.
     criterion_kwargs : dict, default=None
         keyword arguments to pass to criterion
-    optimizer : torch.optim.Optimizer, default=torch.optim.Adam
-        optimizer to be used for training
+    optimizer : Optional[str], default= None
+        optimizer to be used for training. Options are:
+        "Adadelta": torch.optim.Adadelta
+        "Adagrad": torch.optim.Adagrad
+        "Adam": torch.optim.Adam
+        "AdamW": torch.optim.AdamW
+        "SGD": torch.optim.SGD
+        If None, defaults to Adam.
     optimizer_kwargs : dict, default=None
         keyword arguments to pass to optimizer
     window : int
@@ -172,6 +183,7 @@ class ESRNNForecaster(BaseDeepNetworkPyTorch):
         super().__init__(
             num_epochs=num_epochs,
             batch_size=batch_size,
+            criterion=criterion,
             criterion_kwargs=criterion_kwargs,
             optimizer=optimizer,
             optimizer_kwargs=optimizer_kwargs,
@@ -187,24 +199,6 @@ class ESRNNForecaster(BaseDeepNetworkPyTorch):
         self.window = window
         self.pred_len = pred_len
         self.stride = stride
-        self.criterion = criterion
-        if _check_soft_dependencies("torch", severity="none"):
-            import torch
-
-            self.criterions = {
-                "MSE": torch.nn.MSELoss,
-                "L1": torch.nn.L1Loss,
-                "SmoothL1": torch.nn.SmoothL1Loss,
-                "Huber": torch.nn.HuberLoss,
-            }
-
-            self.optimizers = {
-                "Adadelta": torch.optim.Adadelta,
-                "Adagrad": torch.optim.Adagrad,
-                "Adam": torch.optim.Adam,
-                "AdamW": torch.optim.AdamW,
-                "SGD": torch.optim.SGD,
-            }
 
     def _instantiate_criterion(self):
         if self.criterion:

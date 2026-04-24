@@ -54,8 +54,7 @@ class BaseDeepNetworkPyTorch(BaseForecaster):
         self,
         num_epochs=16,
         batch_size=8,
-        in_channels=1,
-        individual=False,
+        criterion=None,
         criterion_kwargs=None,
         optimizer=None,
         optimizer_kwargs=None,
@@ -65,8 +64,7 @@ class BaseDeepNetworkPyTorch(BaseForecaster):
     ):
         self.num_epochs = num_epochs
         self.batch_size = batch_size
-        self.in_channels = in_channels
-        self.individual = individual
+        self.criterion = criterion
         self.criterion_kwargs = criterion_kwargs
         self.optimizer = optimizer
         self.optimizer_kwargs = optimizer_kwargs
@@ -75,6 +73,21 @@ class BaseDeepNetworkPyTorch(BaseForecaster):
         self.custom_dataset_pred = custom_dataset_pred
 
         super().__init__()
+
+        self.criterions = {
+            "MSE": torch.nn.MSELoss,
+            "L1": torch.nn.L1Loss,
+            "SmoothL1": torch.nn.SmoothL1Loss,
+            "Huber": torch.nn.HuberLoss,
+        }
+
+        self.optimizers = {
+            "Adadelta": torch.optim.Adadelta,
+            "Adagrad": torch.optim.Adagrad,
+            "Adam": torch.optim.Adam,
+            "AdamW": torch.optim.AdamW,
+            "SGD": torch.optim.SGD,
+        }
 
     def _fit(self, y, fh, X=None):
         """Fit the network, preserving pretrained weights if available.

@@ -79,12 +79,23 @@ class ConvTimeNetForecaster(_pytorch.BaseDeepNetworkPyTorch):
         The number of epochs to train the model.
     batch_size : int, optional (default=8)
         The size of each mini-batch during training.
-    criterion : callable, optional (default=None)
-        The loss function to use. If None, MSELoss will be used.
-    criterion_kwargs : dict, optional (default=None)
-        Additional keyword arguments to pass to the loss function.
-    optimizer : str or torch.optim.Optimizer, optional (default=None)
-        The optimizer to use. If None, Adam will be used.
+    criterion : Optional[str], default= None
+        Loss function to be used for training. Options are:
+        "MSE": Mean Squared Error
+        "L1": Mean Absolute Error
+        "SmoothL1": Smooth L1 Loss
+        "Huber": Huber Loss
+        If None, defaults to pin_ball.
+    criterion_kwargs : dict, default=None
+        keyword arguments to pass to criterion
+    optimizer : Optional[str], default= None
+        optimizer to be used for training. Options are:
+        "Adadelta": torch.optim.Adadelta
+        "Adagrad": torch.optim.Adagrad
+        "Adam": torch.optim.Adam
+        "AdamW": torch.optim.AdamW
+        "SGD": torch.optim.SGD
+        If None, defaults to Adam.
     optimizer_kwargs : dict, optional (default=None)
         Additional keyword arguments to pass to the optimizer.
     lr : float, optional (default=0.001)
@@ -218,24 +229,16 @@ class ConvTimeNetForecaster(_pytorch.BaseDeepNetworkPyTorch):
         self.enable_res_param = enable_res_param
         self.re_param = re_param
         self.re_param_kernel = re_param_kernel
-        self.num_epochs = num_epochs
-        self.batch_size = batch_size
-        self.criterion_kwargs = criterion_kwargs
-        self.optimizer = optimizer
-        self.optimizer_kwargs = optimizer_kwargs
-        self.lr = lr
         self.device = device
         self.random_state = random_state
-        self.criterion = criterion
-        self.custom_dataset_train = None
-        self.custom_dataset_pred = None
         super().__init__(
-            num_epochs=self.num_epochs,
-            batch_size=self.batch_size,
-            criterion_kwargs=self.criterion_kwargs,
-            optimizer=self.optimizer,
-            optimizer_kwargs=self.optimizer_kwargs,
-            lr=self.lr,
+            num_epochs=num_epochs,
+            batch_size=batch_size,
+            criterion=criterion,
+            criterion_kwargs=criterion_kwargs,
+            optimizer=optimizer,
+            optimizer_kwargs=optimizer_kwargs,
+            lr=lr,
         )
 
     def _build_network(self, fh):

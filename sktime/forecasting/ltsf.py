@@ -33,12 +33,23 @@ class LTSFLinearForecaster(BaseDeepNetworkPyTorch):
         "or applies a single linear layer across all channels. If individual=True, the"
         "a separate linear layer is created for each input channel. If"
         "individual=False, a single shared linear layer is used for all channels."
-    criterion : torch.nn Loss Function, default=torch.nn.MSELoss
-        loss function to be used for training
+    criterion : Optional[str], default= None
+        Loss function to be used for training. Options are:
+        "MSE": Mean Squared Error
+        "L1": Mean Absolute Error
+        "SmoothL1": Smooth L1 Loss
+        "Huber": Huber Loss
+        If None, defaults to MSE.
     criterion_kwargs : dict, default=None
         keyword arguments to pass to criterion
-    optimizer : torch.optim.Optimizer, default=torch.optim.Adam
-        optimizer to be used for training
+    optimizer : Optional[str], default= None
+        optimizer to be used for training. Options are:
+        "Adadelta": torch.optim.Adadelta
+        "Adagrad": torch.optim.Adagrad
+        "Adam": torch.optim.Adam
+        "AdamW": torch.optim.AdamW
+        "SGD": torch.optim.SGD
+        If None, defaults to Adam.
     optimizer_kwargs : dict, default=None
         keyword arguments to pass to optimizer
     lr : float, default=0.003
@@ -106,19 +117,11 @@ class LTSFLinearForecaster(BaseDeepNetworkPyTorch):
         self.pred_len = pred_len
         self.individual = individual
         self.in_channels = in_channels
-        self.criterion = criterion
-        self.optimizer = optimizer
-        self.criterion_kwargs = criterion_kwargs
-        self.optimizer_kwargs = optimizer_kwargs
-        self.lr = lr
-        self.num_epochs = num_epochs
-        self.batch_size = batch_size
 
         super().__init__(
             num_epochs=num_epochs,
             batch_size=batch_size,
-            in_channels=in_channels,
-            individual=individual,
+            criterion=criterion,
             criterion_kwargs=criterion_kwargs,
             optimizer=optimizer,
             optimizer_kwargs=optimizer_kwargs,
@@ -126,26 +129,6 @@ class LTSFLinearForecaster(BaseDeepNetworkPyTorch):
             custom_dataset_train=custom_dataset_train,
             custom_dataset_pred=custom_dataset_pred,
         )
-
-        from sktime.utils.dependencies import _check_soft_dependencies
-
-        if _check_soft_dependencies("torch"):
-            import torch
-
-            self.criterions = {
-                "MSE": torch.nn.MSELoss,
-                "L1": torch.nn.L1Loss,
-                "SmoothL1": torch.nn.SmoothL1Loss,
-                "Huber": torch.nn.HuberLoss,
-            }
-
-            self.optimizers = {
-                "Adadelta": torch.optim.Adadelta,
-                "Adagrad": torch.optim.Adagrad,
-                "Adam": torch.optim.Adam,
-                "AdamW": torch.optim.AdamW,
-                "SGD": torch.optim.SGD,
-            }
 
     def _build_network(self, fh):
         from sktime.networks.ltsf.models.linear import LTSFLinearNetwork
@@ -383,12 +366,23 @@ class LTSFDLinearForecaster(BaseDeepNetworkPyTorch):
         "or applies a single linear layer across all channels. If individual=True, the"
         "a separate linear layer is created for each input channel. If"
         "individual=False, a single shared linear layer is used for all channels."
-    criterion : torch.nn Loss Function, default=torch.nn.MSELoss
-        loss function to be used for training
+    criterion : Optional[str], default= None
+        Loss function to be used for training. Options are:
+        "MSE": Mean Squared Error
+        "L1": Mean Absolute Error
+        "SmoothL1": Smooth L1 Loss
+        "Huber": Huber Loss
+        If None, defaults to MSE.
     criterion_kwargs : dict, default=None
         keyword arguments to pass to criterion
-    optimizer : torch.optim.Optimizer, default=torch.optim.Adam
-        optimizer to be used for training
+    optimizer : Optional[str], default= None
+        optimizer to be used for training. Options are:
+        "Adadelta": torch.optim.Adadelta
+        "Adagrad": torch.optim.Adagrad
+        "Adam": torch.optim.Adam
+        "AdamW": torch.optim.AdamW
+        "SGD": torch.optim.SGD
+        If None, defaults to Adam.
     optimizer_kwargs : dict, default=None
         keyword arguments to pass to optimizer
     lr : float, default=0.003
@@ -456,19 +450,11 @@ class LTSFDLinearForecaster(BaseDeepNetworkPyTorch):
         self.pred_len = pred_len
         self.individual = individual
         self.in_channels = in_channels
-        self.criterion = criterion
-        self.optimizer = optimizer
-        self.criterion_kwargs = criterion_kwargs
-        self.optimizer_kwargs = optimizer_kwargs
-        self.lr = lr
-        self.num_epochs = num_epochs
-        self.batch_size = batch_size
 
         super().__init__(
             num_epochs=num_epochs,
             batch_size=batch_size,
-            in_channels=in_channels,
-            individual=individual,
+            criterion=criterion,
             criterion_kwargs=criterion_kwargs,
             optimizer=optimizer,
             optimizer_kwargs=optimizer_kwargs,
@@ -476,26 +462,6 @@ class LTSFDLinearForecaster(BaseDeepNetworkPyTorch):
             custom_dataset_train=custom_dataset_train,
             custom_dataset_pred=custom_dataset_pred,
         )
-
-        from sktime.utils.dependencies import _check_soft_dependencies
-
-        if _check_soft_dependencies("torch"):
-            import torch
-
-            self.criterions = {
-                "MSE": torch.nn.MSELoss,
-                "L1": torch.nn.L1Loss,
-                "SmoothL1": torch.nn.SmoothL1Loss,
-                "Huber": torch.nn.HuberLoss,
-            }
-
-            self.optimizers = {
-                "Adadelta": torch.optim.Adadelta,
-                "Adagrad": torch.optim.Adagrad,
-                "Adam": torch.optim.Adam,
-                "AdamW": torch.optim.AdamW,
-                "SGD": torch.optim.SGD,
-            }
 
     def _build_network(self, fh):
         from sktime.networks.ltsf.models.linear import LTSFDLinearNetwork
@@ -576,12 +542,23 @@ class LTSFNLinearForecaster(BaseDeepNetworkPyTorch):
         "or applies a single linear layer across all channels. If individual=True, the"
         "a separate linear layer is created for each input channel. If"
         "individual=False, a single shared linear layer is used for all channels."
-    criterion : torch.nn Loss Function, default=torch.nn.MSELoss
-        loss function to be used for training
+    criterion : Optional[str], default= None
+        Loss function to be used for training. Options are:
+        "MSE": Mean Squared Error
+        "L1": Mean Absolute Error
+        "SmoothL1": Smooth L1 Loss
+        "Huber": Huber Loss
+        If None, defaults to MSE.
     criterion_kwargs : dict, default=None
         keyword arguments to pass to criterion
-    optimizer : torch.optim.Optimizer, default=torch.optim.Adam
-        optimizer to be used for training
+    optimizer : Optional[str], default= None
+        optimizer to be used for training. Options are:
+        "Adadelta": torch.optim.Adadelta
+        "Adagrad": torch.optim.Adagrad
+        "Adam": torch.optim.Adam
+        "AdamW": torch.optim.AdamW
+        "SGD": torch.optim.SGD
+        If None, defaults to Adam.
     optimizer_kwargs : dict, default=None
         keyword arguments to pass to optimizer
     lr : float, default=0.003
@@ -649,19 +626,11 @@ class LTSFNLinearForecaster(BaseDeepNetworkPyTorch):
         self.pred_len = pred_len
         self.individual = individual
         self.in_channels = in_channels
-        self.criterion = criterion
-        self.optimizer = optimizer
-        self.criterion_kwargs = criterion_kwargs
-        self.optimizer_kwargs = optimizer_kwargs
-        self.lr = lr
-        self.num_epochs = num_epochs
-        self.batch_size = batch_size
 
         super().__init__(
             num_epochs=num_epochs,
             batch_size=batch_size,
-            in_channels=in_channels,
-            individual=individual,
+            criterion=criterion,
             criterion_kwargs=criterion_kwargs,
             optimizer=optimizer,
             optimizer_kwargs=optimizer_kwargs,
@@ -669,26 +638,6 @@ class LTSFNLinearForecaster(BaseDeepNetworkPyTorch):
             custom_dataset_train=custom_dataset_train,
             custom_dataset_pred=custom_dataset_pred,
         )
-
-        from sktime.utils.dependencies import _check_soft_dependencies
-
-        if _check_soft_dependencies("torch"):
-            import torch
-
-            self.criterions = {
-                "MSE": torch.nn.MSELoss,
-                "L1": torch.nn.L1Loss,
-                "SmoothL1": torch.nn.SmoothL1Loss,
-                "Huber": torch.nn.HuberLoss,
-            }
-
-            self.optimizers = {
-                "Adadelta": torch.optim.Adadelta,
-                "Adagrad": torch.optim.Adagrad,
-                "Adam": torch.optim.Adam,
-                "AdamW": torch.optim.AdamW,
-                "SGD": torch.optim.SGD,
-            }
 
     def _build_network(self, fh):
         from sktime.networks.ltsf.models.linear import LTSFNLinearNetwork
@@ -927,12 +876,23 @@ class LTSFTransformerForecaster(BaseDeepNetworkPyTorch):
         Number of input channels.
     individual : bool, optional (default=False)
         Whether to use individual models for each series.
-    criterion : str or callable, optional
-        Loss function to use.
+    criterion : Optional[str], default= None
+        Loss function to use. Options are:
+        "MSE": Mean Squared Error
+        "L1": Mean Absolute Error
+        "SmoothL1": Smooth L1 Loss
+        "Huber": Huber Loss
+        If None, defaults to MSE.
     criterion_kwargs : dict, optional
         Additional keyword arguments for the loss function.
-    optimizer : str or callable, optional
-        Optimizer to use.
+    optimizer : Optional[str], default= None
+        Optimizer to use. Options are:
+        "Adadelta": torch.optim.Adadelta
+        "Adagrad": torch.optim.Adagrad
+        "Adam": torch.optim.Adam
+        "AdamW": torch.optim.AdamW
+        "SGD": torch.optim.SGD
+        If None, defaults to Adam.
     optimizer_kwargs : dict, optional
         Additional keyword arguments for the optimizer.
     lr : float, optional (default=0.001)
@@ -1033,13 +993,6 @@ class LTSFTransformerForecaster(BaseDeepNetworkPyTorch):
 
         self.individual = individual
         self.in_channels = in_channels
-        self.criterion = criterion
-        self.optimizer = optimizer
-        self.criterion_kwargs = criterion_kwargs
-        self.optimizer_kwargs = optimizer_kwargs
-        self.lr = lr
-        self.num_epochs = num_epochs
-        self.batch_size = batch_size
 
         self.position_encoding = position_encoding
         self.temporal_encoding = temporal_encoding
@@ -1057,8 +1010,7 @@ class LTSFTransformerForecaster(BaseDeepNetworkPyTorch):
         super().__init__(
             num_epochs=num_epochs,
             batch_size=batch_size,
-            in_channels=in_channels,
-            individual=individual,
+            criterion=criterion,
             criterion_kwargs=criterion_kwargs,
             optimizer=optimizer,
             optimizer_kwargs=optimizer_kwargs,
@@ -1066,26 +1018,6 @@ class LTSFTransformerForecaster(BaseDeepNetworkPyTorch):
             custom_dataset_train=custom_dataset_train,
             custom_dataset_pred=custom_dataset_pred,
         )
-
-        from sktime.utils.dependencies import _check_soft_dependencies
-
-        if _check_soft_dependencies("torch"):
-            import torch
-
-            self.criterions = {
-                "MSE": torch.nn.MSELoss,
-                "L1": torch.nn.L1Loss,
-                "SmoothL1": torch.nn.SmoothL1Loss,
-                "Huber": torch.nn.HuberLoss,
-            }
-
-            self.optimizers = {
-                "Adadelta": torch.optim.Adadelta,
-                "Adagrad": torch.optim.Adagrad,
-                "Adam": torch.optim.Adam,
-                "AdamW": torch.optim.AdamW,
-                "SGD": torch.optim.SGD,
-            }
 
     def build_pytorch_train_dataloader(self, y):
         """Build PyTorch DataLoader for training."""
