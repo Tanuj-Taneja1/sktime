@@ -28,16 +28,25 @@ class SCINetForecaster(BaseDeepNetworkPyTorch):
     batch_size : int, default=8
         Number of training examples in each batch.
 
-    criterion : torch.nn Loss Function, default=None
-        Loss function to be used for training. If not provided, a default such as
-        torch.nn.MSELoss is often used.
+    criterion : Optional[str], default= None
+        Loss function to be used for training. Options are:
+        "MSE": Mean Squared Error
+        "L1": Mean Absolute Error
+        "SmoothL1": Smooth L1 Loss
+        "Huber": Huber Loss
+        If None, defaults to MSE.
 
     criterion_kwargs : dict, default=None
         Keyword arguments to pass to the criterion (loss function).
 
-    optimizer : torch.optim.Optimizer, default=None
-        Optimizer to be used for training. If not provided, a default such as
-        torch.optim.Adam is commonly used.
+    optimizer : Optional[str], default= None
+        Optimizer to be used for training. Options are:
+        "Adadelta": torch.optim.Adadelta
+        "Adagrad": torch.optim.Adagrad
+        "Adam": torch.optim.Adam
+        "AdamW": torch.optim.AdamW
+        "SGD": torch.optim.SGD
+        If None, defaults to Adam.
 
     optimizer_kwargs : dict, default=None
         Keyword arguments to pass to the optimizer.
@@ -164,13 +173,6 @@ class SCINetForecaster(BaseDeepNetworkPyTorch):
     ):
         self.seq_len = seq_len
         self.pred_len = pred_len
-        self.criterion = criterion
-        self.optimizer = optimizer
-        self.criterion_kwargs = criterion_kwargs
-        self.optimizer_kwargs = optimizer_kwargs
-        self.lr = lr
-        self.num_epochs = num_epochs
-        self.batch_size = batch_size
         self.hid_size = hid_size
         self.num_stacks = num_stacks
         self.num_levels = num_levels
@@ -187,6 +189,7 @@ class SCINetForecaster(BaseDeepNetworkPyTorch):
         super().__init__(
             num_epochs=num_epochs,
             batch_size=batch_size,
+            criterion=criterion,
             criterion_kwargs=criterion_kwargs,
             optimizer=optimizer,
             optimizer_kwargs=optimizer_kwargs,
