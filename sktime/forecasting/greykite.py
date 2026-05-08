@@ -74,6 +74,7 @@ class GreykiteForecaster(BaseForecaster):
         # CI and test flags
         # -----------------
         "tests:vm": True,
+        "tests:python_dependencies": ["prophet"],
     }
 
     def __init__(
@@ -89,14 +90,6 @@ class GreykiteForecaster(BaseForecaster):
         self.coverage = coverage
 
         super().__init__()
-
-    def __dynamic_tags__(self):
-        """Dynamic tag setter logic for setting tag values condition on parameters.
-
-        This method should be used for setting dynamic tags only.
-        """
-        if self.model_template == "PROPHET":
-            self.set_tags(**{"python_dependencies": ["greykite>=1.0.0", "prophet"]})
 
     def __post_init__(self):
         """Post-init constructor logic, can be used by inheriting classes.
