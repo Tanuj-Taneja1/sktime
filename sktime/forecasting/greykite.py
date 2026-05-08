@@ -74,6 +74,7 @@ class GreykiteForecaster(BaseForecaster):
         # CI and test flags
         # -----------------
         "tests:vm": True,
+        "tests:python_dependencies": ["prophet>=1.3.0"],
     }
 
     def __init__(
@@ -144,7 +145,7 @@ class GreykiteForecaster(BaseForecaster):
         model_components_param = ModelComponentsParam()
 
         # Create the ForecastConfig using Greykite's parameters.
-        self.forecast_config = ForecastConfig(
+        default_forecast_config = ForecastConfig(
             metadata_param=metadata_param,
             model_components_param=model_components_param,
             model_template=self.model_template,
@@ -154,7 +155,7 @@ class GreykiteForecaster(BaseForecaster):
             computation_param=ComputationParam(),
             forecast_one_by_one=False,
         )
-        return self.forecast_config
+        return default_forecast_config
 
     def _fit(self, y, X=None, fh=None):
         """Fit forecaster to training data.
