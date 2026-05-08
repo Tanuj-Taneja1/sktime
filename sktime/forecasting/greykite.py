@@ -74,7 +74,7 @@ class GreykiteForecaster(BaseForecaster):
         # CI and test flags
         # -----------------
         "tests:vm": True,
-        "tests:python_dependencies": ["prophet"],
+        "tests:python_dependencies": ["prophet>=1.3.0"],
     }
 
     def __init__(
